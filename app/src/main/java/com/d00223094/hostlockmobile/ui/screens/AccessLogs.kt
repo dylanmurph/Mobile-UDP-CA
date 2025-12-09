@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,10 +37,9 @@ import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
 @Composable
 fun AccessLogsScreen(
     navController: NavController,
-    // viewmodel can be injected here for data access
     viewModel: DeviceViewModel = viewModel()
 ) {
-    val accessLogs = (1..20).map { "Access Log #$it" } // Sample data
+    val accessLogs by viewModel.accessLogs.collectAsState()
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
 
     // screen content container
@@ -73,7 +73,7 @@ fun AccessLogsScreen(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = log,
+                                text = log.summary,
                                 modifier = Modifier.weight(1f)
                             )
                             Icon(
@@ -83,7 +83,7 @@ fun AccessLogsScreen(
                         }
                         if (isExpanded) {
                             Text(
-                                text = "more info for $log blah blah blah",
+                                text = log.details,
                                 modifier = Modifier.padding(top = 8.dp)
                             )
                         }

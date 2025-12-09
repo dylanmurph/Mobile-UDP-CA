@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,7 +40,7 @@ fun GuestManagementScreen(
     // viewmodel can be injected here for data access
     viewModel: DeviceViewModel = viewModel()
     ) {
-    val guestList = (1..20).map { "Guest $it" } // Sample data
+    val guestList by viewModel.guestList.collectAsState()
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
 
 
@@ -72,7 +73,7 @@ fun GuestManagementScreen(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = guest,
+                                text = guest.summary,
                                 modifier = Modifier.weight(1f)
                             )
                             Icon(
@@ -82,7 +83,7 @@ fun GuestManagementScreen(
                         }
                         if (isExpanded) {
                             Text(
-                                text = "more info for $guest blah blah blah",
+                                text = guest.details,
                                 modifier = Modifier.padding(top = 8.dp)
                             )
                         }
