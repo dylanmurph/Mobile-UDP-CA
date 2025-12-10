@@ -3,26 +3,56 @@ package com.d00223094.hostlockmobile.data
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
+    private val _loggedInUserId = MutableStateFlow<Int?>(null)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val accessLogs: StateFlow<List<AccessLog>> = _loggedInUserId.flatMapLatest { userId ->
+        if (userId != null) {
+            repository.getAllAccessLogsForUser(userId)
+        } else {
+            flowOf(emptyList()) // If no user is logged in, return an empty list
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val accessLogs: StateFlow<List<AccessLog>> = repository.getAllAccessLogs()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000), // Keep flow active for 5s
-            initialValue = emptyList() // Start with an empty list
-        )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val guestList: StateFlow<List<GuestList>> = _loggedInUserId.flatMapLatest { userId ->
+        if (userId != null) {
+            repository.getAllGuestsForUser(userId)
+        } else {
+            flowOf(emptyList())
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    val guestList: StateFlow<List<GuestList>> = repository.getAllGuests()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+    // 3. Create a function to be called after successful login
+    fun onLoginSuccess(userId: Int) {
+        _loggedInUserId.value = userId
+    }
+
+    // 4. Update functions to use the stored userId
+    fun addAccessLog(summary: String, details: String) {
+        _loggedInUserId.value?.let { userId ->
+            viewModelScope.launch {
+                repository.insertAccessLog(summary, details, userId)
+            }
+        }
+    }
+
+    fun addGuest(name: String, booking: String) {
+        _loggedInUserId.value?.let { userId ->
+            viewModelScope.launch {
+                repository.insertGuest(name, booking, userId)
+            }
+        }
+    }
 
     val users: StateFlow<List<Users>> = repository.getAllUsers()
         .stateIn(
@@ -33,17 +63,7 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
 
     // --- Functions to Modify Data ---
 
-    fun addAccessLog(summary: String, details: String) {
-        viewModelScope.launch {
-            repository.insertAccessLog(AccessLog(summary = summary, details = details))
-        }
-    }
 
-    fun addGuest(name: String, booking: String) {
-        viewModelScope.launch {
-            repository.insertGuest(GuestList(name = name, booking = booking))
-        }
-    }
 
     fun deleteAccessLog(id: Int) {
         viewModelScope.launch {

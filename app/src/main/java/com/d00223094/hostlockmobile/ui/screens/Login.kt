@@ -120,9 +120,22 @@ fun LoginScreen(
             // Login Button
             Button(
                 onClick = {
+                    // Check for admin/admin hardcoded login first (as per teammate's logic)
+                    if (username == "admin" && password == "admin") {
+                        viewModel.onLoginSuccess(0) // Assuming 0 is admin ID
+                        errorMessage = null
+                        navController.navigate(Home.route) {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                        }
+                        return@Button
+                    }
+                    
                     scope.launch {
                         val user = viewModel.getUserByName(username)
                         if (user != null && user.password == password) {
+                            viewModel.onLoginSuccess(user.id) // New call from teammate
                             errorMessage = null
                             navController.navigate(Home.route) {
                                 popUpTo(navController.graph.startDestinationId) {
