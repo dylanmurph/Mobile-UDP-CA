@@ -180,7 +180,7 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
-    HostLockMobileTheme {
-        Text("Login Screen Preview")
-    }
+    //HostLockMobileTheme {
+    //    Text("Login Screen Preview")
+    //}
 }
