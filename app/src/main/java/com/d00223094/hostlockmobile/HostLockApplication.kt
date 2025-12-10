@@ -9,6 +9,12 @@ class HostLockApplication : Application() {
     private val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
 
     val repository: AppRepository by lazy {
-        AppRepository(database.accessLogDao(), database.guestListDao())
+        AppRepository(
+            database.accessLogDao(),
+            database.guestListDao(),
+            database.usersDao()
+        )
     }
 }
+
+
