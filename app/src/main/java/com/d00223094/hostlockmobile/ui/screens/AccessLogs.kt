@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,8 +38,9 @@ import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
 @Composable
 fun AccessLogsScreen(
     navController: NavController,
-    viewModel: DeviceViewModel = viewModel()
+    viewModel: DeviceViewModel
 ) {
+    // 2. COLLECT the logs from the ViewModel's StateFlow. This is already correct!
     val accessLogs by viewModel.accessLogs.collectAsState()
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
 
@@ -48,8 +50,11 @@ fun AccessLogsScreen(
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        // screen title
-        Text(text = "Access Logs  Screen Placeholder (List/Filter logs)", style = MaterialTheme.typography.titleLarge)
+        Text(text = "Access Logs", style = MaterialTheme.typography.titleLarge)
+
+        Button(onClick = { viewModel.addAccessLog("Log ${accessLogs.size + 1}", "Log details") }) {
+            Text("Add Test Log")
+        }
 
         // scrollable list of access logs
         LazyColumn(
@@ -82,10 +87,22 @@ fun AccessLogsScreen(
                             )
                         }
                         if (isExpanded) {
-                            Text(
-                                text = log.details,
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
+                            Column(
+                                modifier = Modifier.padding(top = 8.dp),
+                                horizontalAlignment = Alignment.Start
+                            ) {
+                                Text(text = "log details: "+log.details)
+
+                                Button(
+                                    onClick = {
+                                        viewModel.deleteAccessLog(log.id)
+                                        expandedIndex = null
+                                    },
+                                    modifier = Modifier.padding(top = 8.dp)
+                                ) {
+                                    Text("Delete Entry")
+                                }
+                            }
                         }
                     }
                 }
@@ -99,6 +116,7 @@ fun AccessLogsScreen(
 @Composable
 private fun AccessLogsScreenPreview() {
     HostLockMobileTheme {
-        AccessLogsScreen(navController = rememberNavController())
+        // AccessLogsScreen(navController = rememberNavController()
+        Text("Preview is disabled for this screen as it requires a ViewModel.")
     }
 }

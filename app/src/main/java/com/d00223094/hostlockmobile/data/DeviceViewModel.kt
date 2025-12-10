@@ -1,29 +1,62 @@
 package com.d00223094.hostlockmobile.data
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class DeviceViewModel : ViewModel() {
-    private val repository = AppRepository()
+class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
 
-    private val _accessLogs = MutableStateFlow<List<AccessLog>>(emptyList())
-    val accessLogs: StateFlow<List<AccessLog>> = _accessLogs.asStateFlow()
+    val accessLogs: StateFlow<List<AccessLog>> = repository.getAllAccessLogs()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000), // Keep flow active for 5s
+            initialValue = emptyList() // Start with an empty list
+        )
 
-    private val _guestList = MutableStateFlow<List<GuestList>>(emptyList())
-    val guestList: StateFlow<List<GuestList>> = _guestList.asStateFlow()
+    val guestList: StateFlow<List<GuestList>> = repository.getAllGuests()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
-    init {
-        loadAccessLogs()
-        loadGuestList()
+    // --- Functions to Modify Data ---
+
+    fun addAccessLog(summary: String, details: String) {
+        viewModelScope.launch {
+            repository.insertAccessLog(AccessLog(summary = summary, details = details))
+        }
     }
 
-    private fun loadAccessLogs() {
-        _accessLogs.value = repository.loadAccessLogs()
+    fun addGuest(name: String, booking: String) {
+        viewModelScope.launch {
+            repository.insertGuest(GuestList(name = name, booking = booking))
+        }
     }
 
-    private fun loadGuestList() {
-        _guestList.value = repository.loadGuestList()
+    fun deleteAccessLog(id: Int) {
+        viewModelScope.launch {
+            repository.deleteAccessLogById(id)
+        }
+    }
+
+    fun deleteGuest(id: Int) {
+        viewModelScope.launch {
+            repository.deleteGuestById(id)
+        }
+    }
+}
+
+class DeviceViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(DeviceViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return DeviceViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
