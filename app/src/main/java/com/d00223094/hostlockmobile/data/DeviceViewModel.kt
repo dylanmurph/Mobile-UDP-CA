@@ -37,7 +37,6 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
         _loggedInUserId.value = userId
     }
 
-    // 4. Update functions to use the stored userId
     fun addAccessLog(property: String, fobNumber: String, status: String, date: String) {
         _loggedInUserId.value?.let { userId ->
             viewModelScope.launch {

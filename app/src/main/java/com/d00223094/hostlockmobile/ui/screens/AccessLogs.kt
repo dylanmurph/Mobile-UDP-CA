@@ -41,7 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.data.DeviceViewModel
+import com.d00223094.hostlockmobile.data.MockData
 import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
+
 
 @Composable
 fun AccessLogsScreen(
@@ -53,18 +55,21 @@ fun AccessLogsScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    val logNumber = accessLogs.size + 1
+            FloatingActionButton(onClick = {
+                val randomLog = MockData.mockAccessLogs.randomOrNull()
+                if (randomLog != null) {
                     viewModel.addAccessLog(
-                        property = "Property ${accessLogs.size + 1}",
-                        fobNumber = "FOB${accessLogs.size + 1}",
-                        status = if (logNumber % 2 == 0) "Access Denied" else "Access Granted",
-                        date = "2025-12-11 09:0${logNumber} PM") },
+                        property = randomLog.property,
+                        fobNumber = randomLog.fobNumber,
+                        status = randomLog.status,
+                        date = randomLog.date
+                    )
+                }
+            },
                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Log")
+                Icon(Icons.Default.Add, contentDescription = "Add Random Log")
             }
         }
     ) { paddingValues ->

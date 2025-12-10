@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.data.DeviceViewModel
+import com.d00223094.hostlockmobile.data.MockData
 import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
 
 @Composable
@@ -55,15 +56,20 @@ fun GuestManagementScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    viewModel.addGuest(
-                        "New Guest ${guestList.size + 1}",
-                        email = "guest${guestList.size + 1}@email.com",
-                        property = "Property ${guestList.size + 1}",
-                        fobNumber = "FOB${guestList.size + 1}") },
+                    val randomGuest = MockData.mockGuests.randomOrNull()
+                    if (randomGuest != null) {
+                        viewModel.addGuest(
+                            name = randomGuest.name,
+                            email = randomGuest.email,
+                            property = randomGuest.property,
+                            fobNumber = randomGuest.fobNumber
+                        )
+                    }
+                },
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Guest")
+                Icon(Icons.Default.Add, contentDescription = "Add Random Guest")
             }
         }
     ) { paddingValues ->
