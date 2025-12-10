@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -38,130 +40,148 @@ fun RegisterScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-
-            // App Logo
-            Image(
-                painter = painterResource(id = R.drawable.app_logo),
-                contentDescription = "HostLock Logo",
+            Column(
                 modifier = Modifier
-                    .size(120.dp)
-                    .padding(bottom = 16.dp)
-            )
+                    .fillMaxSize()
+                    .padding(24.dp)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
 
-            Text(
-                text = "Create Account",
-                style = MaterialTheme.typography.displaySmall,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                label = { Text("Confirm Password") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.medium,
-
-                isError = password.isNotEmpty() && confirmPassword.isNotEmpty() && password != confirmPassword
-            )
-
-            if (errorMessage != null) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = errorMessage!!,
-                    color = MaterialTheme.colorScheme.error
+                // App Logo
+                Image(
+                    painter = painterResource(id = R.drawable.app_logo),
+                    contentDescription = "HostLock Logo",
+                    modifier = Modifier
+                        .size(120.dp)
+                        .padding(bottom = 16.dp)
                 )
-            }
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    text = "Create Account",
+                    style = MaterialTheme.typography.displaySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                OutlinedTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = { Text("Username") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Password") },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
 
-            Button(
-                onClick = {
+                OutlinedTextField(
+                    value = confirmPassword,
+                    onValueChange = { confirmPassword = it },
+                    label = { Text("Confirm Password") },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
 
-                    if (password != confirmPassword) {
-                        errorMessage = "Passwords do not match."
-                        return@Button
-                    }
-                    if (username.isBlank() || email.isBlank() || password.isBlank()) {
-                        errorMessage = "All fields are required."
-                        return@Button
-                    }
+                    isError = password.isNotEmpty() && confirmPassword.isNotEmpty() && password != confirmPassword
+                )
+
+                if (errorMessage != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = errorMessage!!,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
 
 
-                    scope.launch {
-                        // Check if user exists
-                        val existingUser = viewModel.getUserByName(username)
-                        if (existingUser != null) {
-                            errorMessage = "Username is already taken."
-                        } else {
-                            val newUserId = viewModel.addUser(username, email, password)
+                Button(
+                    onClick = {
 
-                            if (newUserId != -1L) { //Room returns -1 if insertion fails
-                                viewModel.onLoginSuccess(newUserId.toInt())
-                                errorMessage = null
-                                navController.navigate(Home.route) {
-                                    popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                                }
+                        if (password != confirmPassword) {
+                            errorMessage = "Passwords do not match."
+                            return@Button
+                        }
+                        if (username.isBlank() || email.isBlank() || password.isBlank()) {
+                            errorMessage = "All fields are required."
+                            return@Button
+                        }
+
+
+                        scope.launch {
+                            // Check if user exists
+                            val existingUser = viewModel.getUserByName(username)
+                            if (existingUser != null) {
+                                errorMessage = "Username is already taken."
                             } else {
-                                errorMessage = "Failed to create user. Please try again."
+                                val newUserId = viewModel.addUser(username, email, password)
+
+                                if (newUserId != -1L) { //Room returns -1 if insertion fails
+                                    viewModel.onLoginSuccess(newUserId.toInt())
+                                    errorMessage = null
+                                    navController.navigate(Home.route) {
+                                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                                    }
+                                } else {
+                                    errorMessage = "Failed to create user. Please try again."
+                                }
                             }
                         }
-                    }
-                },
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    enabled = username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank(),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Text("Register", style = MaterialTheme.typography.titleMedium)
+                }
+            }
+
+            // Back Button (Placed last to be on top)
+            IconButton(
+                onClick = { navController.popBackStack() },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                enabled = username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank(),
-                shape = MaterialTheme.shapes.medium
+                    .padding(16.dp)
+                    .align(Alignment.TopStart)
             ) {
-                Text("Register", style = MaterialTheme.typography.titleMedium)
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back to Login",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
     }
