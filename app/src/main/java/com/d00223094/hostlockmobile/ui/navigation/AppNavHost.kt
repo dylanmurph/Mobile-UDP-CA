@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.d00223094.hostlockmobile.data.AccessLogs
 import com.d00223094.hostlockmobile.data.AdminMaintenance
+import com.d00223094.hostlockmobile.data.DeviceViewModel
 import com.d00223094.hostlockmobile.data.GuestManagement
 import com.d00223094.hostlockmobile.data.Home
 import com.d00223094.hostlockmobile.data.Login
@@ -26,7 +27,7 @@ private val NAV_BAR_SCREENS = listOf(Home.route, GuestManagement.route, AccessLo
 
 // the entry point for app navigation
 @Composable
-fun AppNavigation() {
+fun AppNavigation(viewModel: DeviceViewModel) {
     // sets up the navigation controller
     val navController = rememberNavController()
     // tracks the currently visible route
@@ -72,16 +73,18 @@ fun AppNavigation() {
             }
             // define the guest management screen composable
             composable(GuestManagement.route) {
-                GuestManagementScreen(navController)
+                GuestManagementScreen(navController, viewModel = viewModel)
             }
             // define the access logs screen composable
             composable(AccessLogs.route) {
-                AccessLogsScreen(navController)
+                AccessLogsScreen(navController, viewModel = viewModel)
             }
+
             // define the admin maintenance screen composable
             composable(AdminMaintenance.route) {
-                AdminMaintenanceScreen(navController)
+                AdminMaintenanceScreen(navController, viewModel = viewModel)
             }
+
         }
     }
 }
