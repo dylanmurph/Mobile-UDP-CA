@@ -70,7 +70,7 @@ fun AppNavigation(viewModel: DeviceViewModel) {
             }
             // define the home screen composable
             composable(Home.route) {
-                HomeScreen(navController)
+                HomeScreen(navController = navController)
             }
             // define the guest management screen composable
             composable(GuestManagement.route) {
