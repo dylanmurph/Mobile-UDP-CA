@@ -29,6 +29,9 @@ interface UsersDao {
 
     @Query("DELETE FROM users")
     suspend fun deleteAllUsers()
+
+    @Query("SELECT * FROM users WHERE name = :username LIMIT 1")
+    suspend fun getUserByName(username: String): Users?
 }
 
 
