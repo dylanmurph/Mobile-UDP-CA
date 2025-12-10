@@ -3,6 +3,7 @@ package com.d00223094.hostlockmobile.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.People
@@ -19,6 +20,7 @@ import com.d00223094.hostlockmobile.data.AdminMaintenance
 import com.d00223094.hostlockmobile.data.GuestManagement
 import com.d00223094.hostlockmobile.data.Home
 import com.d00223094.hostlockmobile.data.HostLockDestination
+import com.d00223094.hostlockmobile.data.Login
 
 // data class to hold the information needed for each button on the bar
 data class BottomNavItem(
@@ -48,6 +50,11 @@ private val BottomNavItems = listOf(
         destination = AdminMaintenance,
         icon = Icons.Filled.Build,
         contentDescription = "Admin"
+    ),
+    BottomNavItem(
+        destination = Login,
+        icon = Icons.Filled.ExitToApp,
+        contentDescription = "Logout"
     )
 )
 
@@ -73,8 +80,8 @@ fun HostLockBottomBar(
                         contentDescription = item.contentDescription
                     )
                 },
-                label = { Text(item.destination.title) },
-                selected = isSelected, // highlights the selected button
+                label = { Text(if(item.destination == Login) "Logout" else item.destination.title) },
+                selected = isSelected,
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     selectedTextColor = MaterialTheme.colorScheme.onSurface,
