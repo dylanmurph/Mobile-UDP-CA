@@ -12,10 +12,20 @@ class AppRepository(
 
     // --- AccessLog Functions ---
 
-    fun getAllAccessLogs(): Flow<List<AccessLog>> = accessLogDao.getAllLogs()
+    fun getAllAccessLogsForUser(userId: Int): Flow<List<AccessLog>> = accessLogDao.getAllLogsForUser(userId)
+    fun getAllGuestsForUser(userId: Int): Flow<List<GuestList>> = guestListDao.getAllGuestsForUser(userId)
 
-    fun getAccessLogById(id: Int): Flow<AccessLog> = accessLogDao.getLogById(id)
+    suspend fun deleteAllAccessLogsForUser(userId: Int) = accessLogDao.deleteAllLogsForUser(userId)
+    suspend fun deleteAllGuestsForUser(userId: Int) = guestListDao.deleteAllGuestsForUser(userId)
 
+
+
+    suspend fun insertAccessLog(summary: String, details: String, userId: Int) {
+        accessLogDao.insertLog(AccessLog(summary = summary, details = details, userId = userId))
+    }
+    suspend fun insertGuest(name: String, booking: String, userId: Int) {
+        guestListDao.insertGuest(GuestList(name = name, booking = booking, userId = userId))
+    }
 
     suspend fun insertAccessLog(log: AccessLog) {
         accessLogDao.insertLog(log)
@@ -32,7 +42,7 @@ class AppRepository(
 
     // --- GuestList Functions ---
 
-    fun getAllGuests(): Flow<List<GuestList>> = guestListDao.getAllGuests()
+
 
     fun getGuestById(id: Int): Flow<GuestList> = guestListDao.getGuestById(id)
 
@@ -66,6 +76,10 @@ class AppRepository(
         usersDao.deleteUserById(id)
     }
 
+
+    suspend fun getUserByName(username: String): Users? {
+        return usersDao.getUserByName(username)
+    }
 
 
 }

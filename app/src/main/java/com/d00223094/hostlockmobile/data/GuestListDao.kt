@@ -25,11 +25,14 @@ interface GuestListDao {
     @Query("SELECT * FROM guest_list WHERE id = :id")
     fun getGuestById(id: Int): Flow<GuestList>
 
-    @Query("SELECT * FROM guest_list ORDER BY id DESC")
-    fun getAllGuests(): Flow<List<GuestList>>
+    @Query("SELECT * FROM guest_list WHERE userId = :userId ORDER BY id DESC")
+    fun getAllGuestsForUser(userId: Int): Flow<List<GuestList>>
 
     @Query("DELETE FROM guest_list WHERE id = :id")
     suspend fun deleteGuestById(id: Int)
+
+    @Query("DELETE FROM guest_list WHERE userId = :userId")
+    suspend fun deleteAllGuestsForUser(userId: Int)
 
     @Query("DELETE FROM guest_list")
     suspend fun deleteAllGuests()
