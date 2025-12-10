@@ -3,23 +3,29 @@ package com.d00223094.hostlockmobile.data
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.d00223094.hostlockmobile.network.MarsApi
+import com.d00223094.hostlockmobile.ui.MarsUiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
     private val _loggedInUserId = MutableStateFlow<Int?>(null)
+    val loggedInUserId: StateFlow<Int?> = _loggedInUserId.asStateFlow()
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val accessLogs: StateFlow<List<AccessLog>> = _loggedInUserId.flatMapLatest { userId ->
         if (userId != null) {
             repository.getAllAccessLogsForUser(userId)
         } else {
-            flowOf(emptyList()) // If no user is logged in, return an empty list
+            flowOf(emptyList())
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -32,12 +38,10 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // 3. Create a function to be called after successful login
     fun onLoginSuccess(userId: Int) {
         _loggedInUserId.value = userId
     }
 
-    // 4. Update functions to use the stored userId
     fun addAccessLog(summary: String, details: String) {
         _loggedInUserId.value?.let { userId ->
             viewModelScope.launch {
@@ -61,10 +65,6 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
             initialValue = emptyList()
         )
 
-    // --- Functions to Modify Data ---
-
-
-
     fun deleteAccessLog(id: Int) {
         viewModelScope.launch {
             repository.deleteAccessLogById(id)
@@ -77,13 +77,11 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }
 
-
     fun clearAllAccessLogs() {
         viewModelScope.launch {
             repository.deleteAllAccessLogs()
         }
     }
-
 
     fun clearAllGuests() {
         viewModelScope.launch {
@@ -107,7 +105,6 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
             repository.deleteUserById(id)
         }
     }
-
 
     fun clearAllUsers() {
         viewModelScope.launch {
