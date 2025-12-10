@@ -49,6 +49,27 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
             repository.deleteGuestById(id)
         }
     }
+
+
+    fun clearAllAccessLogs() {
+        viewModelScope.launch {
+            repository.deleteAllAccessLogs()
+        }
+    }
+
+
+    fun clearAllGuests() {
+        viewModelScope.launch {
+            repository.deleteAllGuests()
+        }
+    }
+
+    fun clearAllData() {
+        viewModelScope.launch {
+            repository.deleteAllAccessLogs()
+            repository.deleteAllGuests()
+        }
+    }
 }
 
 class DeviceViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {

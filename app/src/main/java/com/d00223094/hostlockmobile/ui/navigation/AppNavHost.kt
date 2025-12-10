@@ -79,10 +79,12 @@ fun AppNavigation(viewModel: DeviceViewModel) {
             composable(AccessLogs.route) {
                 AccessLogsScreen(navController, viewModel = viewModel)
             }
+
             // define the admin maintenance screen composable
             composable(AdminMaintenance.route) {
-                AdminMaintenanceScreen(navController)
+                AdminMaintenanceScreen(navController, viewModel = viewModel)
             }
+
         }
     }
 }
