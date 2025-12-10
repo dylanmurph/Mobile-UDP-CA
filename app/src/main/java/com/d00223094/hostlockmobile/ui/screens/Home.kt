@@ -1,7 +1,7 @@
-// this file contains the placeholder for the home screen
 package com.d00223094.hostlockmobile.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -22,8 +22,19 @@ fun HomeScreen(navController: NavController) {
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        // screen title placeholder
-        Text(text = "Home Screen Placeholder (Single BnB / Device)", style = MaterialTheme.typography.titleLarge)
+        Column {
+            // screen title placeholder
+            Text(
+                text = "Welcome Home",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                text = "HostLock Mobile",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
     }
 }
 
