@@ -19,7 +19,9 @@ data class GuestList(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
-    val booking: String,
+    val email: String,
+    val property: String,
+    val fobNumber: String,
     @androidx.room.ColumnInfo(index = true)
     val userId: Int
 )

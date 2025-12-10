@@ -20,11 +20,21 @@ class AppRepository(
 
 
 
-    suspend fun insertAccessLog(summary: String, details: String, userId: Int) {
-        accessLogDao.insertLog(AccessLog(summary = summary, details = details, userId = userId))
+    suspend fun insertAccessLog(property: String, fobNumber: String, status: String, date: String, userId: Int) {
+        accessLogDao.insertLog(AccessLog(
+            property = property,
+            fobNumber = fobNumber,
+            status = status,
+            date = date,
+            userId = userId))
     }
-    suspend fun insertGuest(name: String, booking: String, userId: Int) {
-        guestListDao.insertGuest(GuestList(name = name, booking = booking, userId = userId))
+    suspend fun insertGuest(name: String, email: String, property: String, fobNumber: String, userId: Int) {
+        guestListDao.insertGuest(GuestList(
+            name = name,
+            email = email,
+            property = property,
+            fobNumber = fobNumber,
+            userId = userId))
     }
 
     suspend fun insertAccessLog(log: AccessLog) {

@@ -41,7 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.data.DeviceViewModel
+import com.d00223094.hostlockmobile.data.MockData
 import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
+
 
 @Composable
 fun AccessLogsScreen(
@@ -53,12 +55,21 @@ fun AccessLogsScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { viewModel.addAccessLog("Log ${accessLogs.size + 1}", "Log details") },
+            FloatingActionButton(onClick = {
+                val randomLog = MockData.mockAccessLogs.randomOrNull()
+                if (randomLog != null) {
+                    viewModel.addAccessLog(
+                        property = randomLog.property,
+                        fobNumber = randomLog.fobNumber,
+                        status = randomLog.status,
+                        date = randomLog.date
+                    )
+                }
+            },
                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Log")
+                Icon(Icons.Default.Add, contentDescription = "Add Random Log")
             }
         }
     ) { paddingValues ->
@@ -133,7 +144,7 @@ fun AccessLogsScreen(
                                     )
                                     Spacer(modifier = Modifier.padding(8.dp))
                                     Text(
-                                        text = log.summary,
+                                        text = "${log.status} on ${log.property}",
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold,
                                         modifier = Modifier.weight(1f)
@@ -144,20 +155,14 @@ fun AccessLogsScreen(
                                     )
                                 }
                                 if (isExpanded) {
-                                    Spacer(modifier = Modifier.height(12.dp))
                                     Column(
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier.padding(top = 8.dp),
                                         horizontalAlignment = Alignment.Start
                                     ) {
-                                        Text(
-                                            text = "Details:",
-                                            style = MaterialTheme.typography.labelMedium
-                                        )
-                                        Text(
-                                            text = log.details,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            modifier = Modifier.padding(bottom = 16.dp)
-                                        )
+                                        Text(text = "Date: ${log.date}")
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(text = "Fob Number: ${log.fobNumber}")
+
 
                                         Button(
                                             onClick = {

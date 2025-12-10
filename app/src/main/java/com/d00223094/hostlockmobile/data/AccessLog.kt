@@ -16,8 +16,10 @@ import androidx.room.ForeignKey
 data class AccessLog(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val summary: String,
-    val details: String,
+    val property: String,
+    val fobNumber: String,
+    val status: String,
+    val date: String,
     @androidx.room.ColumnInfo(index = true)
     val userId: Int
 )
