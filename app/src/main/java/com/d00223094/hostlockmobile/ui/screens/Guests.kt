@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.data.DeviceViewModel
+import com.d00223094.hostlockmobile.data.MockData
 import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
 
 @Composable
@@ -54,11 +55,21 @@ fun GuestManagementScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.addGuest("New Guest ${guestList.size + 1}", "Booking details") },
+                onClick = {
+                    val randomGuest = MockData.mockGuests.randomOrNull()
+                    if (randomGuest != null) {
+                        viewModel.addGuest(
+                            name = randomGuest.name,
+                            email = randomGuest.email,
+                            property = randomGuest.property,
+                            fobNumber = randomGuest.fobNumber
+                        )
+                    }
+                },
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Guest")
+                Icon(Icons.Default.Add, contentDescription = "Add Random Guest")
             }
         }
     ) { paddingValues ->
@@ -143,21 +154,16 @@ fun GuestManagementScreen(
                                         contentDescription = if (isExpanded) "Collapse" else "Expand"
                                     )
                                 }
-                                if (isExpanded) {
-                                    Spacer(modifier = Modifier.height(12.dp))
-                                    Column(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalAlignment = Alignment.Start
-                                    ) {
-                                        Text(
-                                            text = "Booking Details:",
-                                            style = MaterialTheme.typography.labelMedium
-                                        )
-                                        Text(
-                                            text = guest.booking,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            modifier = Modifier.padding(bottom = 16.dp)
-                                        )
+                                    if (isExpanded) {
+                                        Column(
+                                            modifier = Modifier.padding(top = 8.dp),
+                                            horizontalAlignment = Alignment.Start
+                                        ) {
+                                            Text(text = "Email: ${guest.email}")
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text(text = "Property: ${guest.property}")
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text(text = "Fob Number: ${guest.fobNumber}")
 
                                         Button(
                                             onClick = {
