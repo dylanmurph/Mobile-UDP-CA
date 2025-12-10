@@ -24,6 +24,13 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
             initialValue = emptyList()
         )
 
+    val users: StateFlow<List<Users>> = repository.getAllUsers()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
     // --- Functions to Modify Data ---
 
     fun addAccessLog(summary: String, details: String) {
@@ -68,6 +75,25 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
         viewModelScope.launch {
             repository.deleteAllAccessLogs()
             repository.deleteAllGuests()
+        }
+    }
+
+    fun addUser(name: String, password: String, email: String) {
+        viewModelScope.launch {
+            repository.insertUser(Users(name = name, password = password, email = email))
+        }
+    }
+
+    fun deleteUser(id: Int) {
+        viewModelScope.launch {
+            repository.deleteUserById(id)
+        }
+    }
+
+
+    fun clearAllUsers() {
+        viewModelScope.launch {
+            repository.deleteAllUsers()
         }
     }
 }

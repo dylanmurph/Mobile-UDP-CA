@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [AccessLog::class, GuestList::class], version = 1, exportSchema = false)
+@Database(entities = [AccessLog::class, GuestList::class, Users::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun usersDao(): UsersDao
     abstract fun accessLogDao(): AccessLogDao
     abstract fun guestListDao(): GuestListDao
 

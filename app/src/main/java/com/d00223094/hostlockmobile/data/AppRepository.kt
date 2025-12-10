@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.Flow
 // This is called "dependency injection".
 class AppRepository(
     private val accessLogDao: AccessLogDao,
-    private val guestListDao: GuestListDao
+    private val guestListDao: GuestListDao,
+    private val usersDao: UsersDao
 ) {
 
     // --- AccessLog Functions ---
@@ -14,6 +15,7 @@ class AppRepository(
     fun getAllAccessLogs(): Flow<List<AccessLog>> = accessLogDao.getAllLogs()
 
     fun getAccessLogById(id: Int): Flow<AccessLog> = accessLogDao.getLogById(id)
+
 
     suspend fun insertAccessLog(log: AccessLog) {
         accessLogDao.insertLog(log)
@@ -45,4 +47,25 @@ class AppRepository(
     suspend fun deleteGuestById(id: Int) {
         guestListDao.deleteGuestById(id)
     }
+
+    // --- Users Functions ---
+
+    fun getAllUsers(): Flow<List<Users>> = usersDao.getAllUsers()
+
+    fun getUserById(id: Int): Flow<Users> = usersDao.getUserById(id)
+
+    suspend fun insertUser(user: Users) {
+        usersDao.insertUser(user)
+    }
+
+    suspend fun deleteAllUsers() {
+        usersDao.deleteAllUsers()
+    }
+
+    suspend fun deleteUserById(id: Int) {
+        usersDao.deleteUserById(id)
+    }
+
+
+
 }
