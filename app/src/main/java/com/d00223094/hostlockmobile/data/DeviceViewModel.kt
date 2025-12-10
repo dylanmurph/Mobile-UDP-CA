@@ -98,10 +98,8 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }
 
-    fun addUser(name: String, password: String, email: String) {
-        viewModelScope.launch {
-            repository.insertUser(Users(name = name, password = password, email = email))
-        }
+    suspend fun addUser(name: String, email: String, password: String): Long {
+        return repository.insertUser(Users(name = name, email = email, password = password))
     }
 
     fun deleteUser(id: Int) {

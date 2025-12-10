@@ -64,8 +64,8 @@ class AppRepository(
 
     fun getUserById(id: Int): Flow<Users> = usersDao.getUserById(id)
 
-    suspend fun insertUser(user: Users) {
-        usersDao.insertUser(user)
+    suspend fun insertUser(user: Users): Long {
+        return usersDao.insertUser(user)
     }
 
     suspend fun deleteAllUsers() {

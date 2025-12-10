@@ -36,6 +36,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.data.DeviceViewModel
 import com.d00223094.hostlockmobile.data.Login
@@ -49,6 +51,7 @@ fun AdminMaintenanceScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -155,7 +158,9 @@ fun AdminMaintenanceScreen(
                 Button(
                     onClick = {
                         if (name.isNotBlank() && email.isNotBlank() && password.isNotBlank()) {
-                            viewModel.addUser(name, password, email)
+                            scope.launch {
+                                viewModel.addUser(name, password, email)
+                            }
                             name = ""
                             email = ""
                             password = ""

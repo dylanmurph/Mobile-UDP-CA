@@ -21,6 +21,7 @@ import com.d00223094.hostlockmobile.ui.screens.AdminMaintenanceScreen
 import com.d00223094.hostlockmobile.ui.screens.GuestManagementScreen
 import com.d00223094.hostlockmobile.ui.screens.HomeScreen
 import com.d00223094.hostlockmobile.ui.screens.LoginScreen
+import com.d00223094.hostlockmobile.ui.screens.RegisterScreen
 
 // list of screens where the bottom navigation bar should be visible
 private val NAV_BAR_SCREENS = listOf(Home.route, GuestManagement.route, AccessLogs.route, AdminMaintenance.route)
@@ -85,6 +86,9 @@ fun AppNavigation(viewModel: DeviceViewModel) {
                 AdminMaintenanceScreen(navController, viewModel = viewModel)
             }
 
+            composable("register") {
+                RegisterScreen(navController, viewModel = viewModel)
+            }
         }
     }
 }
