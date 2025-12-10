@@ -30,7 +30,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.d00223094.hostlockmobile.R
-import com.d00223094.hostlockmobile.network.MarsPhoto
+import com.d00223094.hostlockmobile.ui.MarsPhotoUiModel
 import com.d00223094.hostlockmobile.ui.MarsUiState
 import com.d00223094.hostlockmobile.ui.MarsViewModel
 import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
@@ -97,7 +97,7 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MarsPhotoCard(photo: MarsPhoto, retryAction: () -> Unit, modifier: Modifier = Modifier) {
+fun MarsPhotoCard(photo: MarsPhotoUiModel, retryAction: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.padding(horizontal = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
