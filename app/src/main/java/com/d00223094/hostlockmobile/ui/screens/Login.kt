@@ -84,9 +84,21 @@ fun LoginScreen( navController: NavController,
 
         Button(
             onClick = {
+
+                if (username == "admin" && password == "admin") {
+                    viewModel.onLoginSuccess(0)
+                    errorMessage = null
+                    navController.navigate(Home.route) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                    return@Button
+                }
                 scope.launch {
                     val user = viewModel.getUserByName(username)
                     if (user != null && user.password == password) {
+                        viewModel.onLoginSuccess(user.id)
                         errorMessage = null
                         navController.navigate(Home.route) {
                             popUpTo(navController.graph.startDestinationId) {

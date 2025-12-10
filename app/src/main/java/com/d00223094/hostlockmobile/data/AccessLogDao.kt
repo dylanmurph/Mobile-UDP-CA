@@ -23,11 +23,14 @@ interface AccessLogDao {
     @Query("SELECT * FROM access_logs WHERE id = :id")
     fun getLogById(id: Int): Flow<AccessLog>
 
-    @Query("SELECT * FROM access_logs ORDER BY id DESC")
-    fun getAllLogs(): Flow<List<AccessLog>>
+    @Query("SELECT * FROM access_logs WHERE userId = :userId ORDER BY id DESC")
+    fun getAllLogsForUser(userId: Int): Flow<List<AccessLog>>
 
     @Query("DELETE FROM access_logs WHERE id = :id")
     suspend fun deleteLogById(id: Int)
+
+    @Query("DELETE FROM access_logs WHERE userId = :userId")
+    suspend fun deleteAllLogsForUser(userId: Int)
 
     @Query("DELETE FROM access_logs")
     suspend fun deleteAllLogs()
