@@ -65,7 +65,7 @@ fun AppNavigation(viewModel: DeviceViewModel) {
         ) {
             // define the login screen composable
             composable(Login.route) {
-                LoginScreen(navController)
+                LoginScreen(navController = navController, viewModel = viewModel)
             }
             // define the home screen composable
             composable(Home.route) {

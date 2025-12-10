@@ -96,6 +96,10 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
             repository.deleteAllUsers()
         }
     }
+
+    suspend fun getUserByName(username: String): Users? {
+        return repository.getUserByName(username)
+    }
 }
 
 class DeviceViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {
