@@ -67,5 +67,9 @@ class AppRepository(
     }
 
 
+    suspend fun getUserByName(username: String): Users? {
+        return usersDao.getUserByName(username)
+    }
+
 
 }
