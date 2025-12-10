@@ -54,7 +54,13 @@ fun AccessLogsScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { viewModel.addAccessLog("Log ${accessLogs.size + 1}", "Log details") },
+                onClick = {
+                    val logNumber = accessLogs.size + 1
+                    viewModel.addAccessLog(
+                        property = "Property ${accessLogs.size + 1}",
+                        fobNumber = "FOB${accessLogs.size + 1}",
+                        status = if (logNumber % 2 == 0) "Access Denied" else "Access Granted",
+                        date = "2025-12-11 09:0${logNumber} PM") },
                 containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                 contentColor = MaterialTheme.colorScheme.onTertiaryContainer
             ) {
@@ -133,7 +139,7 @@ fun AccessLogsScreen(
                                     )
                                     Spacer(modifier = Modifier.padding(8.dp))
                                     Text(
-                                        text = log.summary,
+                                        text = "${log.status} on ${log.property}",
                                         style = MaterialTheme.typography.titleMedium,
                                         fontWeight = FontWeight.Bold,
                                         modifier = Modifier.weight(1f)
@@ -144,20 +150,14 @@ fun AccessLogsScreen(
                                     )
                                 }
                                 if (isExpanded) {
-                                    Spacer(modifier = Modifier.height(12.dp))
                                     Column(
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier.padding(top = 8.dp),
                                         horizontalAlignment = Alignment.Start
                                     ) {
-                                        Text(
-                                            text = "Details:",
-                                            style = MaterialTheme.typography.labelMedium
-                                        )
-                                        Text(
-                                            text = log.details,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            modifier = Modifier.padding(bottom = 16.dp)
-                                        )
+                                        Text(text = "Date: ${log.date}")
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(text = "Fob Number: ${log.fobNumber}")
+
 
                                         Button(
                                             onClick = {

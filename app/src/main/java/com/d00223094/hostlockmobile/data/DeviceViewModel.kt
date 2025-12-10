@@ -38,18 +38,18 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     // 4. Update functions to use the stored userId
-    fun addAccessLog(summary: String, details: String) {
+    fun addAccessLog(property: String, fobNumber: String, status: String, date: String) {
         _loggedInUserId.value?.let { userId ->
             viewModelScope.launch {
-                repository.insertAccessLog(summary, details, userId)
+                repository.insertAccessLog(property, fobNumber, status, date, userId)
             }
         }
     }
 
-    fun addGuest(name: String, booking: String) {
+    fun addGuest(name: String, email: String, property: String, fobNumber: String) {
         _loggedInUserId.value?.let { userId ->
             viewModelScope.launch {
-                repository.insertGuest(name, booking, userId)
+                repository.insertGuest(name, email, property, fobNumber, userId)
             }
         }
     }
