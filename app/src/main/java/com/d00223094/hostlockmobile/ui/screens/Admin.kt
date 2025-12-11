@@ -2,6 +2,7 @@ package com.d00223094.hostlockmobile.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,6 +44,7 @@ fun AdminMaintenanceScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        // Centered Header (User's Preference)
         Text(
             text = "Admin Maintenance",
             style = MaterialTheme.typography.headlineMedium,
@@ -48,8 +52,42 @@ fun AdminMaintenanceScreen(
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        // Theme Settings (From Matt's Branch, integrated into User's Layout)
+        val currentTheme by viewModel.theme.collectAsState(initial = "System")
 
+        Text("Theme Settings", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Light Theme Button
+            Button(
+                onClick = { viewModel.saveThemePreference("Light") },
+                modifier = Modifier.weight(1f),
+                colors = if (currentTheme == "Light") ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) else ButtonDefaults.buttonColors()
+            ) {
+                Text("Light")
+            }
+
+            // Dark Theme Button
+            Button(
+                onClick = { viewModel.saveThemePreference("Dark") },
+                modifier = Modifier.weight(1f),
+                colors = if (currentTheme == "Dark") ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) else ButtonDefaults.buttonColors()
+            ) {
+                Text("Dark")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Database Operations (User's Preference: Centered)
         Text(
             text = "Database Operations",
             style = MaterialTheme.typography.titleMedium,

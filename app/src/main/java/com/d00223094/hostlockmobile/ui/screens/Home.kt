@@ -258,6 +258,6 @@ fun MarsPhotoCard(photo: MarsPhotoUiModel, retryAction: () -> Unit, modifier: Mo
 @Composable
 fun HomeScreenPreview() {
     HostLockMobileTheme {
-        ErrorScreen(retryAction = { })
+        Text("Preview")
     }
 }

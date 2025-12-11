@@ -10,6 +10,9 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.d00223094.hostlockmobile.data.DeviceViewModel
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryDark,
@@ -57,16 +60,28 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun HostLockMobileTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    viewModel: DeviceViewModel? = null,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val theme = if (viewModel != null) {
+        val themeState by viewModel.theme.collectAsState(initial = "Light")
+        themeState
+    } else {
+        "Light"
+    }
+
+    val darkTheme: Boolean = theme == "Dark"
+
+    val colorScheme = when {
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
 
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.background.toArgb()
+            window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }

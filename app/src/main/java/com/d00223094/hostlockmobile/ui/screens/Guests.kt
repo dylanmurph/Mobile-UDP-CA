@@ -195,7 +195,7 @@ fun GuestManagementScreen(
 @Preview(showBackground = true)
 @Composable
 private fun GuestManagementScreenPreview() {
-    HostLockMobileTheme {
-        Text("Preview disabled due to ViewModel")
-    }
+    //HostLockMobileTheme {
+    //    Text("Preview disabled due to ViewModel")
+    //}
 }

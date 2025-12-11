@@ -115,6 +115,15 @@ class DeviceViewModel(private val repository: AppRepository) : ViewModel() {
     suspend fun getUserByName(username: String): Users? {
         return repository.getUserByName(username)
     }
+
+    // --- Theme Preference ---
+    val theme: kotlinx.coroutines.flow.Flow<String> = repository.themePreference
+
+    fun saveThemePreference(theme: String) {
+        viewModelScope.launch {
+            repository.saveThemePreference(theme)
+        }
+    }
 }
 
 class DeviceViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {

@@ -194,7 +194,7 @@ fun AccessLogsScreen(
 @Preview(showBackground = true)
 @Composable
 private fun AccessLogsScreenPreview() {
-    HostLockMobileTheme {
-        Text("Preview disabled due to ViewModel")
-    }
+    //HostLockMobileTheme {
+    //    Text("Preview disabled due to ViewModel")
+    //}
 }

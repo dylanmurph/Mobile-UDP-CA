@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.Flow
 class AppRepository(
     private val accessLogDao: AccessLogDao,
     private val guestListDao: GuestListDao,
-    private val usersDao: UsersDao
+    private val usersDao: UsersDao,
+    private val userDataStore: UserDataStore
 ) {
 
     // --- AccessLog Functions ---
@@ -89,6 +90,12 @@ class AppRepository(
 
     suspend fun getUserByName(username: String): Users? {
         return usersDao.getUserByName(username)
+    }
+
+    val themePreference: Flow<String> = userDataStore.themePreference
+
+    suspend fun saveThemePreference(theme: String) {
+        userDataStore.saveThemePreference(theme)
     }
 
 
