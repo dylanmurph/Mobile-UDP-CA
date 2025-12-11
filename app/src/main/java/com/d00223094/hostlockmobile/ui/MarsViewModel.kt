@@ -6,12 +6,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.d00223094.hostlockmobile.network.MarsApi
-import com.d00223094.hostlockmobile.network.MarsPhoto
 import kotlinx.coroutines.launch
 import java.io.IOException
+import kotlin.random.Random
+
+data class MarsPhotoUiModel(
+    val imgSrc: String
+)
 
 sealed interface MarsUiState {
-    data class Success(val photo: MarsPhoto) : MarsUiState
+    data class Success(val photo: MarsPhotoUiModel) : MarsUiState
     object Error : MarsUiState
     object Loading : MarsUiState
 }
@@ -28,12 +32,8 @@ class MarsViewModel : ViewModel() {
         viewModelScope.launch {
             marsUiState = MarsUiState.Loading
             marsUiState = try {
-                val listResult = MarsApi.retrofitService.getMarsPhotos()
-                if (listResult.isNotEmpty()) {
-                    MarsUiState.Success(listResult.random())
-                } else {
-                    MarsUiState.Error
-                }
+                val result = MarsApi.retrofitService.getMarsPhotos(Random.nextInt())
+                MarsUiState.Success(MarsPhotoUiModel(result.file))
             } catch (e: IOException) {
                 MarsUiState.Error
             } catch (e: retrofit2.HttpException) {

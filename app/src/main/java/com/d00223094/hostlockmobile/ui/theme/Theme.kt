@@ -60,11 +60,15 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun HostLockMobileTheme(
-    viewModel: DeviceViewModel,
+    viewModel: DeviceViewModel? = null,
     content: @Composable () -> Unit
 ) {
-
-    val theme by viewModel.theme.collectAsState(initial = "Light")
+    val theme = if (viewModel != null) {
+        val themeState by viewModel.theme.collectAsState(initial = "Light")
+        themeState
+    } else {
+        "Light"
+    }
 
     val darkTheme: Boolean = theme == "Dark"
 

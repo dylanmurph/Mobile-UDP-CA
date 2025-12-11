@@ -53,6 +53,7 @@ fun GuestManagementScreen(
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -78,6 +79,7 @@ fun GuestManagementScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Guest Management",
@@ -109,7 +111,8 @@ fun GuestManagementScreen(
                 }
             } else {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     itemsIndexed(guestList) { index, guest ->
                         val isExpanded = expandedIndex == index
