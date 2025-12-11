@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.R
 import com.d00223094.hostlockmobile.data.DeviceViewModel
 import com.d00223094.hostlockmobile.data.Home
+import com.d00223094.hostlockmobile.utils.SecurityUtils
 import kotlinx.coroutines.launch
 
 @Composable
@@ -153,6 +154,12 @@ fun RegisterScreen(
                             errorMessage = "All fields are required."
                             return@Button
                         }
+                        
+                        if (!SecurityUtils.isValidEmail(email)) {
+                            Log.d(TAG, "Invalid email format")
+                            errorMessage = "Please enter a valid email address."
+                            return@Button
+                        }
 
                         scope.launch {
                             Log.d(TAG, "Checking if username '$username' exists")
@@ -161,7 +168,7 @@ fun RegisterScreen(
                                 Log.d(TAG, "Username '$username' is already taken")
                                 errorMessage = "Username is already taken."
                             } else {
-                                val newUserId = viewModel.addUser(username, email, password)
+                                val newUserId = viewModel.addUser(username, email, SecurityUtils.hashPassword(password))
                                 if (newUserId != -1L) { 
                                     Log.d(TAG, "User registration successful. New user ID: $newUserId")
                                     viewModel.onLoginSuccess(newUserId.toInt())

@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.R
 import com.d00223094.hostlockmobile.data.DeviceViewModel
 import com.d00223094.hostlockmobile.data.Home
+import com.d00223094.hostlockmobile.utils.SecurityUtils
 import kotlinx.coroutines.launch
 
 @Composable
@@ -146,7 +147,7 @@ fun LoginScreen(
                     
                     scope.launch {
                         val user = viewModel.getUserByName(username)
-                        if (user != null && user.password == password) {
+                        if (user != null && user.password == SecurityUtils.hashPassword(password)) {
                             Log.d(TAG, "User login successful for user id: ${user.id}")
                             viewModel.onLoginSuccess(user.id) // New call from teammate
                             errorMessage = null
