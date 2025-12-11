@@ -66,19 +66,29 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
                 AsyncImage(
-                    model = "https://hostlocksd3b.online/logo192.png",
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data("https://hostlocksd3b.online/logo192.png")
+                        .crossfade(true)
+                        .build(),
+                    placeholder = painterResource(R.drawable.ic_launcher_foreground),
+                    error = painterResource(R.drawable.ic_launcher_background),
                     contentDescription = "HostLock Logo",
                     modifier = Modifier
                         .size(100.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        .background(
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        )
                         .padding(8.dp),
                     contentScale = ContentScale.Fit
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
                     text = "HostLock Mobile",
                     style = MaterialTheme.typography.headlineMedium.copy(
@@ -109,7 +119,10 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                         retryAction = { marsViewModel.getMarsPhotos() },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    is MarsUiState.Error -> ErrorScreen(retryAction = { marsViewModel.getMarsPhotos() })
+
+                    is MarsUiState.Error -> ErrorScreen(
+                        retryAction = { marsViewModel.getMarsPhotos() }
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -172,7 +185,9 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = retryAction,
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.error
+            )
         ) {
             Icon(
                 imageVector = Icons.Default.Refresh,
@@ -186,7 +201,11 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MarsPhotoCard(photo: MarsPhotoUiModel, retryAction: () -> Unit, modifier: Modifier = Modifier) {
+fun MarsPhotoCard(
+    photo: MarsPhotoUiModel,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -203,12 +222,13 @@ fun MarsPhotoCard(photo: MarsPhotoUiModel, retryAction: () -> Unit, modifier: Mo
                     .data(photo.imgSrc.replace("http://", "https://"))
                     .crossfade(true)
                     .build(),
+                placeholder = painterResource(R.drawable.ic_launcher_foreground),
                 error = painterResource(R.drawable.ic_launcher_background),
                 contentDescription = "Mars Photo",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
-            
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
