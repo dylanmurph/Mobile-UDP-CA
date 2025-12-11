@@ -1,5 +1,6 @@
 package com.d00223094.hostlockmobile.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -165,6 +166,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+    val TAG = "ErrorScreen"
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -184,7 +186,10 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Button(
-            onClick = retryAction,
+            onClick = { 
+                Log.d(TAG, "Retry button clicked")
+                retryAction() 
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.error
             )
@@ -206,6 +211,7 @@ fun MarsPhotoCard(
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val TAG = "MarsPhotoCard"
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -255,7 +261,10 @@ fun MarsPhotoCard(
             )
 
             FilledIconButton(
-                onClick = retryAction,
+                onClick = { 
+                    Log.d(TAG, "Refresh image button clicked")
+                    retryAction() 
+                },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(16.dp),

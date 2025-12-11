@@ -1,5 +1,6 @@
 package com.d00223094.hostlockmobile.ui.screens
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -52,11 +53,13 @@ fun AccessLogsScreen(
 ) {
     val accessLogs by viewModel.accessLogs.collectAsState()
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
+    val TAG = "AccessLogsScreen"
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
             FloatingActionButton(onClick = {
+                Log.d(TAG, "Add random log clicked")
                 val randomLog = MockData.mockAccessLogs.randomOrNull()
                 if (randomLog != null) {
                     viewModel.addAccessLog(
@@ -169,6 +172,7 @@ fun AccessLogsScreen(
 
                                         Button(
                                             onClick = {
+                                                Log.d(TAG, "Delete log button clicked for log id: ${log.id}")
                                                 viewModel.deleteAccessLog(log.id)
                                                 expandedIndex = null
                                             },

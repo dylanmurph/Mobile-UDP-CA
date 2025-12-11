@@ -1,5 +1,6 @@
 package com.d00223094.hostlockmobile.ui.screens
 
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -51,12 +52,14 @@ fun GuestManagementScreen(
 ) {
     val guestList by viewModel.guestList.collectAsState()
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
+    val TAG = "GuestManagementScreen"
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    Log.d(TAG, "Add random guest clicked")
                     val randomGuest = MockData.mockGuests.randomOrNull()
                     if (randomGuest != null) {
                         viewModel.addGuest(
@@ -170,6 +173,7 @@ fun GuestManagementScreen(
 
                                         Button(
                                             onClick = {
+                                                Log.d(TAG, "Delete guest button clicked for log id: ${guest.id}")
                                                 viewModel.deleteGuest(guest.id)
                                                 expandedIndex = null
                                             },

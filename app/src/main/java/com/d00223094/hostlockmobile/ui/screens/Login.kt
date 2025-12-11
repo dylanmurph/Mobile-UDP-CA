@@ -1,5 +1,6 @@
 package com.d00223094.hostlockmobile.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -31,11 +31,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.d00223094.hostlockmobile.R
 import com.d00223094.hostlockmobile.data.DeviceViewModel
 import com.d00223094.hostlockmobile.data.Home
-import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -47,6 +45,7 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
+    val TAG = "LoginScreen"
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -131,8 +130,10 @@ fun LoginScreen(
             // Login Button
             Button(
                 onClick = {
+                    Log.d(TAG, "Login button clicked. Username: $username")
                     // Check for admin/admin hardcoded login first (as per teammate's logic)
                     if (username == "admin" && password == "admin") {
+                        Log.d(TAG, "Admin login successful")
                         viewModel.onLoginSuccess(0) // Assuming 0 is admin ID
                         errorMessage = null
                         navController.navigate(Home.route) {
@@ -146,6 +147,7 @@ fun LoginScreen(
                     scope.launch {
                         val user = viewModel.getUserByName(username)
                         if (user != null && user.password == password) {
+                            Log.d(TAG, "User login successful for user id: ${user.id}")
                             viewModel.onLoginSuccess(user.id) // New call from teammate
                             errorMessage = null
                             navController.navigate(Home.route) {
@@ -154,6 +156,7 @@ fun LoginScreen(
                                 }
                             }
                         } else {
+                            Log.d(TAG, "Invalid username or password")
                             errorMessage = "Invalid username or password."
                         }
                     }
@@ -170,7 +173,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Spacer(modifier = Modifier.height(8.dp))
-            TextButton(onClick = { navController.navigate("register") }) {
+            TextButton(onClick = { 
+                Log.d(TAG, "Register button clicked")
+                navController.navigate("register") 
+            }) {
                 Text("Don't have an account? Register")
             }
         }

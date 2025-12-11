@@ -29,12 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.d00223094.hostlockmobile.data.DeviceViewModel
 import com.d00223094.hostlockmobile.ui.theme.HostLockMobileTheme
+import android.util.Log
 
 @Composable
 fun AdminMaintenanceScreen(
     navController: NavController, viewModel: DeviceViewModel
 ) {
     val scrollState = rememberScrollState()
+    val TAG = "AdminMaintenanceScreen"
 
     Column(
         modifier = Modifier
@@ -64,7 +66,10 @@ fun AdminMaintenanceScreen(
         ) {
             // Light Theme Button
             Button(
-                onClick = { viewModel.saveThemePreference("Light") },
+                onClick = {
+                    Log.d(TAG, "Light theme button clicked")
+                    viewModel.saveThemePreference("Light")
+                },
                 modifier = Modifier.weight(1f),
                 colors = if (currentTheme == "Light") ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -75,7 +80,10 @@ fun AdminMaintenanceScreen(
 
             // Dark Theme Button
             Button(
-                onClick = { viewModel.saveThemePreference("Dark") },
+                onClick = {
+                    Log.d(TAG, "Dark theme button clicked")
+                    viewModel.saveThemePreference("Dark")
+                },
                 modifier = Modifier.weight(1f),
                 colors = if (currentTheme == "Dark") ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -97,7 +105,10 @@ fun AdminMaintenanceScreen(
         )
 
         OutlinedButton(
-            onClick = { viewModel.clearAllAccessLogs() },
+            onClick = {
+                Log.d(TAG, "Clear all access logs button clicked")
+                viewModel.clearAllAccessLogs()
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.error
@@ -111,7 +122,10 @@ fun AdminMaintenanceScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedButton(
-            onClick = { viewModel.clearAllGuests() },
+            onClick = {
+                Log.d(TAG, "Clear all guests button clicked")
+                viewModel.clearAllGuests()
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.error
@@ -125,7 +139,10 @@ fun AdminMaintenanceScreen(
         Spacer(modifier = Modifier.height(8.dp))
         
         OutlinedButton(
-            onClick = { viewModel.clearAllUsers() },
+            onClick = {
+                Log.d(TAG, "Clear all users button clicked")
+                viewModel.clearAllUsers()
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.error
@@ -139,7 +156,10 @@ fun AdminMaintenanceScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { viewModel.clearAllData() },
+            onClick = {
+                Log.d(TAG, "Clear ALL database entries button clicked")
+                viewModel.clearAllData()
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.error,

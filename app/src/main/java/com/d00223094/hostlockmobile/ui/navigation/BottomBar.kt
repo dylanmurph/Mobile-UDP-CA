@@ -1,6 +1,7 @@
 // this file creates the bottom navigation bar found on the main screens
 package com.d00223094.hostlockmobile.ui.navigation
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.ExitToApp
@@ -64,6 +65,7 @@ fun HostLockBottomBar(
     currentRoute: String?,
     onNavigateToDestination: (HostLockDestination) -> Unit
 ) {
+    val TAG = "HostLockBottomBar"
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface
@@ -90,8 +92,10 @@ fun HostLockBottomBar(
                     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 onClick = {
+                    Log.d(TAG, "Bottom navigation item clicked: ${item.contentDescription}")
                     // navigate only if it is not the current screen
                     if (currentRoute != item.destination.route) {
+                        Log.d(TAG, "Navigating to ${item.destination.route}")
                         onNavigateToDestination(item.destination)
                     }
                 }
